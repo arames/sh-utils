@@ -1,9 +1,12 @@
+#!/bin/bash
+
 COLOUR_RED="\033[0;31m"
 COLOUR_GREEN="\033[0;32m"
 COLOUR_NONE="\033[0m"
 
 ERRORS=0
 FAILED_TRIED_COMMANDS=""
+DRY_RUN="false"
 
 print_error() {
 	echo -e "${COLOUR_RED}ERROR: ${*}${COLOUR_NONE}" >&2
@@ -16,6 +19,7 @@ error() {
 
 safe() {
 	echo -e "${COLOUR_GREEN}${*}${COLOUR_NONE}"
+	if [ "$DRY_RUN" == "true" ]; then return; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	if eval "$@" ; then
@@ -28,6 +32,7 @@ safe() {
 
 try() {
 	echo -e "${COLOUR_GREEN}${*}${COLOUR_NONE}"
+	if [ "$DRY_RUN" == "true" ]; then return; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	if eval "$@" ; then
