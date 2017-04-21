@@ -26,6 +26,7 @@ safe() {
 		:
 	else
 		ERRORS=$((ERRORS+1))
+		FAILED_TRIED_COMMANDS="${FAILED_TRIED_COMMANDS}\n${COLOUR_RED}${*}${COLOUR_NONE}"
 		error "Failed command:\n$*";
 	fi
 }
@@ -39,7 +40,7 @@ try() {
 		:
 	else
 		ERRORS=$((ERRORS+1))
-		FAILED_TRIED_COMMANDS="${FAILED_TRIED_COMMANDS}${COLOUR_RED}${*}${COLOUR_NONE}"
+		FAILED_TRIED_COMMANDS="${FAILED_TRIED_COMMANDS}\n${COLOUR_RED}${*}${COLOUR_NONE}"
 		print_error "$@"
 	fi
 }
