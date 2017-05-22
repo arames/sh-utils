@@ -19,7 +19,7 @@ error() {
 
 safe() {
 	echo -e "${COLOUR_GREEN}${*}${COLOUR_NONE}"
-	if [ "$DRY_RUN" == "true" ]; then return; fi
+	if [[ "$DRY_RUN" == "true" ]]; then return; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	if eval "$@" ; then
@@ -33,7 +33,7 @@ safe() {
 
 try() {
 	echo -e "${COLOUR_GREEN}${*}${COLOUR_NONE}"
-	if [ "$DRY_RUN" == "true" ]; then return; fi
+	if [[ "$DRY_RUN" == "true" ]]; then return; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	if eval "$@" ; then
@@ -46,7 +46,7 @@ try() {
 }
 
 status_and_exit() {
-	if [ $ERRORS -eq 0 ]; then
+	if [[ $ERRORS -eq 0 ]]; then
 		echo -e "${COLOUR_GREEN}success${COLOUR_NONE}"
 	else
 		echo -e "${COLOUR_RED}FAILURE${COLOUR_NONE}"
