@@ -14,6 +14,8 @@ ERRORS=${ERRORS:-0}
 FAILED_TRIED_COMMANDS=${FAILED_TRIED_COMMANDS:-""}
 DRY_RUN=${DRY_RUN:-"false"}
 
+trap ctrl_c_handler INT
+
 print_error() {
 	echo -e "${COLOUR_RED}ERROR: ${*}${COLOUR_NONE}" >&2
 }
@@ -72,3 +74,6 @@ NPROC=nproc
 # Use brew coreutils `gnproc` on OSX.
 if [[ $(uname) == 'Darwin' ]]; then export NPROC=gnproc; fi
 
+function ctrl_c_handler() {
+	status_and_exit
+}
