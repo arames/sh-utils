@@ -20,12 +20,12 @@ print_error() {
 
 error() {
 	print_error "$@"
-	if [[ "$BASH_UTILS_INTERACTIVE" == "true" ]]; then return; fi
+	if [[ "$BASH_UTILS_INTERACTIVE" == "true" ]]; then return 1; fi
 	exit 1
 }
 
 safe() {
-	if [[ "$BASH_UTILS_INTERACTIVE" == "true" ]] && [[ "$BASH_UTILS_SAFE_COMMAND_FAILED" == "true" ]]; then return; fi
+	if [[ "$BASH_UTILS_INTERACTIVE" == "false" ]] && [[ "$BASH_UTILS_SAFE_COMMAND_FAILED" == "true" ]]; then return 1; fi
 	echo -e "${COLOUR_GREEN}${*}${COLOUR_NONE}"
 	if [[ "$DRY_RUN" == "true" ]]; then return; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
@@ -41,7 +41,7 @@ safe() {
 }
 
 try() {
-	if [[ "$BASH_UTILS_INTERACTIVE" == "true" ]] && [[ "$BASH_UTILS_SAFE_COMMAND_FAILED" == "true" ]]; then return; fi
+	if [[ "$BASH_UTILS_INTERACTIVE" == "false" ]] && [[ "$BASH_UTILS_SAFE_COMMAND_FAILED" == "true" ]]; then return 1; fi
 	echo -e "${COLOUR_GREEN}${*}${COLOUR_NONE}"
 	if [[ "$DRY_RUN" == "true" ]]; then return; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
