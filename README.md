@@ -1,1 +1,1 @@
-Repository containing bash scripting utilities.
+Repository containing scripting utilities.
