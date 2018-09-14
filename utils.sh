@@ -8,14 +8,23 @@ BASH_UTILS_SAFE_COMMAND_FAILED="false"
 
 COLOUR_RED=${COLOUR_RED:-"\\033[0;31m"}
 COLOUR_GREEN=${COLOUR_GREEN:-"\\033[0;32m"}
+COLOUR_BLUE=${COLOUR_BLUE:-"\\033[0;94m"}
 COLOUR_NONE=${COLOUR_NONE:-"\\033[0;0m"}
 
 ERRORS=${ERRORS:-0}
 FAILED_TRIED_COMMANDS=${FAILED_TRIED_COMMANDS:-""}
 DRY_RUN=${DRY_RUN:-"false"}
 
+print_note() {
+	echo -e "${COLOUR_BLUE}NOTE: ${*}${COLOUR_NONE}" >&2
+}
+
 print_error() {
 	echo -e "${COLOUR_RED}ERROR: ${*}${COLOUR_NONE}" >&2
+}
+
+note() {
+	print_note "$@"
 }
 
 error() {
