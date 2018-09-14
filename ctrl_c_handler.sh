@@ -4,6 +4,6 @@
 
 trap ctrl_c_handler INT
 
-function ctrl_c_handler() {
+ctrl_c_handler() {
 	status_and_exit
 }
