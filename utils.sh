@@ -86,6 +86,24 @@ status_and_exit() {
 }
 
 
+check_nargs() {
+	if [ "$#" -lt 2 -o 3 -lt "$#" ]; then
+		error "Unexpected number of arguments $#, not in [2, 3]"
+	fi
+	nargs="$1"
+	min="$2"
+	if [ "$#" -lt 3 ]; then
+		max="$min"
+	else
+		max="$3"
+	fi
+	if [ "$nargs" -lt "$min" -o "$max" -lt "$nargs" ]; then
+		error "Unexpected number of arguments $nargs, not in [$min, $max]"
+	fi
+	return 0
+}
+
+
 NPROC=nproc
 # Use brew coreutils `gnproc` on OSX.
 if [ "$(uname)" = "Darwin" ]; then export NPROC=gnproc; fi
