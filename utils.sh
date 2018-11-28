@@ -42,8 +42,11 @@ print_error() {
 
 error() {
 	print_error "$@"
-	if [ "$SH_UTILS_INTERACTIVE" = "true" ]; then return 1; fi
-	exit 1
+	if [ "$SH_UTILS_INTERACTIVE" = "true" ]; then
+		return 1;
+	else
+		exit 1
+	fi
 }
 
 cmd() {
@@ -56,7 +59,7 @@ cmd() {
 }
 
 safe() {
-	if [ "$SH_UTILS_INTERACTIVE" = "false" ] && [ "$SH_UTILS_SAFE_COMMAND_FAILED" = "true" ]; then return 1; fi
+	if [ "$SH_UTILS_SAFE_COMMAND_FAILED" = "true" ]; then return 1; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	"$@"
@@ -64,14 +67,13 @@ safe() {
 	if [ "$rc" -ne 0 ]; then
 		SH_UTILS_SAFE_COMMAND_FAILED="true"
 		ERRORS=$((ERRORS+1))
-		FAILED_TRIED_COMMANDS="${FAILED_TRIED_COMMANDS}\\n${COLOUR_RED}${*}${COLOUR_NONE}"
 		error "Failed command:\\n$*";
 	fi
 	return "$rc"
 }
 
 try() {
-	if [ "$SH_UTILS_INTERACTIVE" = "false" ] && [ "$SH_UTILS_SAFE_COMMAND_FAILED" = "true" ]; then return 1; fi
+	if [ "$SH_UTILS_SAFE_COMMAND_FAILED" = "true" ]; then return 1; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	eval "$@"
