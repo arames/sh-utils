@@ -5,20 +5,20 @@ case $- in
   *) SH_UTILS_INTERACTIVE="false";;
 esac
 
-COLOUR_GREEN=${COLOUR_GREEN:-"\\033[0;32m"}
-COLOUR_BLUE=${COLOUR_BLUE:-"\\033[0;94m"}
-COLOUR_ORANGE=${COLOUR_ORANGE:-"\\033[0;33m"}
-COLOUR_RED=${COLOUR_RED:-"\\033[0;31m"}
-COLOUR_NONE=${COLOUR_NONE:-"\\033[0;0m"}
+SH_UTILS_COLOUR_GREEN=${SH_UTILS_COLOUR_GREEN:-"\\033[0;32m"}
+SH_UTILS_COLOUR_BLUE=${SH_UTILS_COLOUR_BLUE:-"\\033[0;94m"}
+SH_UTILS_COLOUR_ORANGE=${SH_UTILS_COLOUR_ORANGE:-"\\033[0;33m"}
+SH_UTILS_COLOUR_RED=${SH_UTILS_COLOUR_RED:-"\\033[0;31m"}
+SH_UTILS_COLOUR_NONE=${SH_UTILS_COLOUR_NONE:-"\\033[0;0m"}
 
-ERRORS=${ERRORS:-0}
-FAILED_TRIED_COMMANDS_COUNT=${FAILED_TRIED_COMMANDS_COUNT:-0}
-FAILED_TRIED_COMMANDS_LIST=${FAILED_TRIED_COMMANDS_LIST:-""}
-DRY_RUN=${DRY_RUN:-"false"}
+SH_UTILS_ERRORS=${SH_UTILS_ERRORS:-0}
+SH_UTILS_FAILED_TRIED_COMMANDS_COUNT=${SH_UTILS_FAILED_TRIED_COMMANDS_COUNT:-0}
+SH_UTILS_FAILED_TRIED_COMMANDS_LIST=${SH_UTILS_FAILED_TRIED_COMMANDS_LIST:-""}
+SH_UTILS_DRY_RUN=${SH_UTILS_DRY_RUN:-"false"}
 
 print_note() {
 	# shellcheck disable=SC2039
-	echo -e "${COLOUR_BLUE}NOTE: ${*}${COLOUR_NONE}" >&2
+	echo -e "${SH_UTILS_COLOUR_BLUE}NOTE: ${*}${SH_UTILS_COLOUR_NONE}" >&2
 }
 
 note() {
@@ -27,7 +27,7 @@ note() {
 
 print_warning() {
 	# shellcheck disable=SC2039
-	echo -e "${COLOUR_ORANGE}WARNING: ${*}${COLOUR_NONE}" >&2
+	echo -e "${SH_UTILS_COLOUR_ORANGE}WARNING: ${*}${SH_UTILS_COLOUR_NONE}" >&2
 }
 
 warning() {
@@ -36,11 +36,11 @@ warning() {
 
 print_error() {
 	# shellcheck disable=SC2039
-	echo -e "${COLOUR_RED}ERROR: ${*}${COLOUR_NONE}" >&2
+	echo -e "${SH_UTILS_COLOUR_RED}ERROR: ${*}${SH_UTILS_COLOUR_NONE}" >&2
 }
 
 error() {
-	ERRORS=$((ERRORS+1))
+	SH_UTILS_ERRORS=$((SH_UTILS_ERRORS+1))
 	print_error "$@"
 	if [ "$SH_UTILS_INTERACTIVE" = "true" ]; then
 		return 1;
@@ -51,15 +51,15 @@ error() {
 
 cmd() {
 	# shellcheck disable=SC2039
-	echo -e "${COLOUR_GREEN}${*}${COLOUR_NONE}"
-	if [ "$DRY_RUN" = "true" ]; then return 0; fi
+	echo -e "${SH_UTILS_COLOUR_GREEN}${*}${SH_UTILS_COLOUR_NONE}"
+	if [ "$SH_UTILS_DRY_RUN" = "true" ]; then return 0; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	eval "$@"
 }
 
 safe() {
-	if [ "$ERRORS" -ne 0 ]; then return 1; fi
+	if [ "$SH_UTILS_ERRORS" -ne 0 ]; then return 1; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	"$@"
@@ -71,38 +71,38 @@ safe() {
 }
 
 try() {
-	if [ "$ERRORS" -ne 0 ]; then return 1; fi
+	if [ "$SH_UTILS_ERRORS" -ne 0 ]; then return 1; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
 	eval "$@"
 	rc=$?
 	if [ "$rc" -ne 0 ] ; then
-		FAILED_TRIED_COMMANDS_COUNT=$((FAILED_TRIED_COMMANDS_COUNT+1))
-		FAILED_TRIED_COMMANDS_LIST="${FAILED_TRIED_COMMANDS_LIST}\\n${COLOUR_RED}${*}${COLOUR_NONE}"
+		SH_UTILS_FAILED_TRIED_COMMANDS_COUNT=$((SH_UTILS_FAILED_TRIED_COMMANDS_COUNT+1))
+		SH_UTILS_FAILED_TRIED_COMMANDS_LIST="${SH_UTILS_FAILED_TRIED_COMMANDS_LIST}\\n${SH_UTILS_COLOUR_RED}${*}${SH_UTILS_COLOUR_NONE}"
 		warning "$@"
 	fi
 }
 
 status_and_exit() {
-	if [ $ERRORS -eq 0 ]; then
+	if [ $SH_UTILS_ERRORS -eq 0 ]; then
 	# shellcheck disable=SC2039
-		echo -e "${COLOUR_GREEN}success${COLOUR_NONE}"
+		echo -e "${SH_UTILS_COLOUR_GREEN}success${SH_UTILS_COLOUR_NONE}"
 	else
 		# shellcheck disable=SC2039
-		echo -e "${COLOUR_RED}FAILURE${COLOUR_NONE}"
+		echo -e "${SH_UTILS_COLOUR_RED}FAILURE${SH_UTILS_COLOUR_NONE}"
 	fi
 
-	if [ $FAILED_TRIED_COMMANDS_COUNT -ne 0 ]; then
+	if [ $SH_UTILS_FAILED_TRIED_COMMANDS_COUNT -ne 0 ]; then
 		# shellcheck disable=SC2039
-		echo -e "${COLOUR_RED}Tried commands failed:${COLOUR_NONE}"
+		echo -e "${SH_UTILS_COLOUR_RED}Tried commands failed:${SH_UTILS_COLOUR_NONE}"
 		# shellcheck disable=SC2039
-		echo -e "${FAILED_TRIED_COMMANDS_LIST}"
+		echo -e "${SH_UTILS_FAILED_TRIED_COMMANDS_LIST}"
 	fi
 
 	if [ "$SH_UTILS_INTERACTIVE" = "true" ]; then
-		return $ERRORS;
+		return $SH_UTILS_ERRORS;
 	else
-		exit "$ERRORS"
+		exit "$SH_UTILS_ERRORS"
 	fi
 }
 
