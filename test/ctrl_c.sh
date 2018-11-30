@@ -2,7 +2,7 @@
 
 # To test, run the script and press Ctrl-C while it sleeps.
 
-# shellcheck disable=SC1091
+# shellcheck source=/dev/null
 . "../utils.sh"
 
 try ls blargh

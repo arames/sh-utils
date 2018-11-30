@@ -5,11 +5,11 @@ case $- in
   *) SH_UTILS_INTERACTIVE="false";;
 esac
 
-SH_UTILS_COLOUR_GREEN=${SH_UTILS_COLOUR_GREEN:-"\\033[0;32m"}
-SH_UTILS_COLOUR_BLUE=${SH_UTILS_COLOUR_BLUE:-"\\033[0;94m"}
-SH_UTILS_COLOUR_ORANGE=${SH_UTILS_COLOUR_ORANGE:-"\\033[0;33m"}
-SH_UTILS_COLOUR_RED=${SH_UTILS_COLOUR_RED:-"\\033[0;31m"}
-SH_UTILS_COLOUR_NONE=${SH_UTILS_COLOUR_NONE:-"\\033[0;0m"}
+SH_UTILS_COLOUR_RED="\\e[0;31m"
+SH_UTILS_COLOUR_GREEN="\\e[0;32m"
+SH_UTILS_COLOUR_YELLOW="\\e[0;33m"
+SH_UTILS_COLOUR_BLUE="\\e[0;34m"
+SH_UTILS_COLOUR_NONE="\\e[0;30m"
 
 SH_UTILS_ERRORS=${SH_UTILS_ERRORS:-0}
 SH_UTILS_FAILED_TRIED_COMMANDS_COUNT=${SH_UTILS_FAILED_TRIED_COMMANDS_COUNT:-0}
@@ -17,8 +17,7 @@ SH_UTILS_FAILED_TRIED_COMMANDS_LIST=${SH_UTILS_FAILED_TRIED_COMMANDS_LIST:-""}
 SH_UTILS_DRY_RUN=${SH_UTILS_DRY_RUN:-"false"}
 
 print_note() {
-	# shellcheck disable=SC2039
-	echo -e "${SH_UTILS_COLOUR_BLUE}NOTE: ${*}${SH_UTILS_COLOUR_NONE}" >&2
+	printf "%bNOTE: %s%b\\n" "${SH_UTILS_COLOUR_BLUE}" "${*}" "${SH_UTILS_COLOUR_NONE}" >&2
 }
 
 note() {
@@ -26,8 +25,7 @@ note() {
 }
 
 print_warning() {
-	# shellcheck disable=SC2039
-	echo -e "${SH_UTILS_COLOUR_ORANGE}WARNING: ${*}${SH_UTILS_COLOUR_NONE}" >&2
+	printf "%bWARNING: %s%b\\n" "${SH_UTILS_COLOUR_YELLOW}" "${*}" "${SH_UTILS_COLOUR_NONE}" >&2
 }
 
 warning() {
@@ -35,8 +33,7 @@ warning() {
 }
 
 print_error() {
-	# shellcheck disable=SC2039
-	echo -e "${SH_UTILS_COLOUR_RED}ERROR: ${*}${SH_UTILS_COLOUR_NONE}" >&2
+	printf "%bERROR: %s%b\\n" "${SH_UTILS_COLOUR_RED}" "${*}" "${SH_UTILS_COLOUR_NONE}" >&2
 }
 
 error() {
@@ -50,8 +47,7 @@ error() {
 }
 
 cmd() {
-	# shellcheck disable=SC2039
-	echo -e "${SH_UTILS_COLOUR_GREEN}${*}${SH_UTILS_COLOUR_NONE}"
+	printf "%s\\n" "${SH_UTILS_COLOUR_GREEN}${*}${SH_UTILS_COLOUR_NONE}"
 	if [ "$SH_UTILS_DRY_RUN" = "true" ]; then return 0; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
@@ -85,18 +81,14 @@ try() {
 
 status_and_exit() {
 	if [ $SH_UTILS_ERRORS -eq 0 ]; then
-	# shellcheck disable=SC2039
-		echo -e "${SH_UTILS_COLOUR_GREEN}success${SH_UTILS_COLOUR_NONE}"
+		printf "%s\\n" "${SH_UTILS_COLOUR_GREEN}success${SH_UTILS_COLOUR_NONE}"
 	else
-		# shellcheck disable=SC2039
-		echo -e "${SH_UTILS_COLOUR_RED}FAILURE${SH_UTILS_COLOUR_NONE}"
+		printf "%s\\n" "${SH_UTILS_COLOUR_RED}FAILURE${SH_UTILS_COLOUR_NONE}"
 	fi
 
 	if [ $SH_UTILS_FAILED_TRIED_COMMANDS_COUNT -ne 0 ]; then
-		# shellcheck disable=SC2039
-		echo -e "${SH_UTILS_COLOUR_RED}Tried commands failed:${SH_UTILS_COLOUR_NONE}"
-		# shellcheck disable=SC2039
-		echo -e "${SH_UTILS_FAILED_TRIED_COMMANDS_LIST}"
+		printf "%s\\n" "${SH_UTILS_COLOUR_RED}Tried commands failed:${SH_UTILS_COLOUR_NONE}"
+		printf "%s\\n" "${SH_UTILS_FAILED_TRIED_COMMANDS_LIST}"
 	fi
 
 	if [ "$SH_UTILS_INTERACTIVE" = "true" ]; then

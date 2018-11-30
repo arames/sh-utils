@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# shellcheck disable=SC1091
+# shellcheck source=/dev/null
 . "../utils.sh"
 
 safe cmd rm -rf /tmp/test-sh-utils/interactive
