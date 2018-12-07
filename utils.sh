@@ -9,7 +9,7 @@ SH_UTILS_COLOUR_RED="\\e[0;31m"
 SH_UTILS_COLOUR_GREEN="\\e[0;32m"
 SH_UTILS_COLOUR_YELLOW="\\e[0;33m"
 SH_UTILS_COLOUR_BLUE="\\e[0;34m"
-SH_UTILS_COLOUR_NONE="\\e[0;30m"
+SH_UTILS_COLOUR_NONE="\\e[0;0m"
 
 SH_UTILS_ERRORS=${SH_UTILS_ERRORS:-0}
 SH_UTILS_FAILED_TRIED_COMMANDS_COUNT=${SH_UTILS_FAILED_TRIED_COMMANDS_COUNT:-0}
@@ -47,7 +47,7 @@ error() {
 }
 
 cmd() {
-	printf "%s\\n" "${SH_UTILS_COLOUR_GREEN}${*}${SH_UTILS_COLOUR_NONE}"
+	printf "%b%s%b\\n" "${SH_UTILS_COLOUR_GREEN}" "${*}" "${SH_UTILS_COLOUR_NONE}"
 	if [ "$SH_UTILS_DRY_RUN" = "true" ]; then return 0; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
@@ -81,13 +81,13 @@ try() {
 
 status_and_exit() {
 	if [ $SH_UTILS_ERRORS -eq 0 ]; then
-		printf "%s\\n" "${SH_UTILS_COLOUR_GREEN}success${SH_UTILS_COLOUR_NONE}"
+		printf "%b%s%b\\n" "${SH_UTILS_COLOUR_GREEN}" "success" "${SH_UTILS_COLOUR_NONE}"
 	else
-		printf "%s\\n" "${SH_UTILS_COLOUR_RED}FAILURE${SH_UTILS_COLOUR_NONE}"
+		printf "%b%s%b\\n" "${SH_UTILS_COLOUR_RED}" "FAILURE" "${SH_UTILS_COLOUR_NONE}"
 	fi
 
 	if [ $SH_UTILS_FAILED_TRIED_COMMANDS_COUNT -ne 0 ]; then
-		printf "%s\\n" "${SH_UTILS_COLOUR_RED}Tried commands failed:${SH_UTILS_COLOUR_NONE}"
+		printf "%b%s%b\\n" "${SH_UTILS_COLOUR_RED}" "Tried commands failed:" "${SH_UTILS_COLOUR_NONE}"
 		printf "%s\\n" "${SH_UTILS_FAILED_TRIED_COMMANDS_LIST}"
 	fi
 
