@@ -117,6 +117,9 @@ check_nargs() {
 }
 
 
-NPROC=nproc
+__SH_UTILS_NPROC=nproc
 # Use brew coreutils `gnproc` on OSX.
-if [ "$(uname)" = "Darwin" ]; then export NPROC=gnproc; fi
+if [ "$(uname)" = "Darwin" ]; then
+  export __SH_UTILS_NPROC=gnproc;
+fi
+export SH_UTILS_NPROC=$("$__SH_UTILS_NPROC")
