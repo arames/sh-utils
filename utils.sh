@@ -103,4 +103,5 @@ __SH_UTILS_NPROC=nproc
 if [ "$(uname)" = "Darwin" ]; then
   export __SH_UTILS_NPROC=gnproc;
 fi
-export SH_UTILS_NPROC=$("$__SH_UTILS_NPROC")
+SH_UTILS_NPROC=$("$__SH_UTILS_NPROC")
+export SH_UTILS_NPROC
