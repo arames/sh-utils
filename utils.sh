@@ -59,7 +59,6 @@ print_cmd() {
 
 cmd() {
   print_cmd "$@"
-	printf "%b%s%b\\n" "${SH_UTILS_COLOUR_GREEN}" "${*}" "${SH_UTILS_COLOUR_NONE}"
 	if [ "$SH_UTILS_DRY_RUN" = "true" ]; then return 0; fi
 	# Use `eval` to handle commands passed as strings. This is useful for example
 	# for `safe "echo blah > /tmp/out"`.
