@@ -73,7 +73,7 @@ safe() {
 	"$@"
 	rc=$?
 	if [ "$rc" -ne 0 ]; then
-		error "Failed command:\\n$*";
+		error "Failed command: $*";
 	fi
 	return "$rc"
 }
